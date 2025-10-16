@@ -1,6 +1,6 @@
 function HourlyWeather() {
     return (
-        <div>
+        <div className="flex-grow">
             <h2>Hourly Weather</h2>
             {/* Add hourly weather details here */}
         </div>
