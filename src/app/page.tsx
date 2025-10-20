@@ -37,13 +37,13 @@ export default function Home() {
 
     useEffect(() => {
         fetchWeatherData();
-    }, [location]);
+    }, [location, fetchWeatherData]);
 
     return (
         <div className="max-w-[575px] md:max-w-[1248px] mx-auto p-4">
             <Header />
             <h1 className="lg:text-6xl text-5xl text-center my-10">
-                How's the sky looking today?
+                {`How's the sky looking today?`}
             </h1>
             <SearchBar location={location} setLocation={setLocation} />
             <div className="flex gap-3 mt-10">
