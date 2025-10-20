@@ -5,7 +5,7 @@ export async function getLocationsByName(name: string) {
             throw new Error("Failed to fetch location data");
         }
         const data = await response.json();
-        return data.results; // Return the first matching location
+        return data.results;
     } catch (error) {
         console.error(error);
         throw error;
