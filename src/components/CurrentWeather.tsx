@@ -24,10 +24,10 @@ function CurrentWeather({
                     </h1>
                     <p className="text-md font-thin italic">
                         {currentData?.time.toLocaleDateString("en-US", {
-                            weekday: "long", // Tuesday
-                            month: "short", // Oct
-                            day: "numeric", // 16
-                            year: "numeric", // 2025
+                            weekday: "long",
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
                         })}
                     </p>
                 </div>
