@@ -3,11 +3,9 @@ import { getLocationsByName } from "@/api/getLocations";
 import { useState, useEffect, useRef } from "react";
 
 function SearchBar({
-    location,
     setLocation,
     setLoading,
 }: {
-    location: LocationData;
     setLocation: (data: LocationData) => void;
     setLoading: (loading: boolean) => void;
 }) {
@@ -15,7 +13,6 @@ function SearchBar({
     const [isOpen, setIsOpen] = useState(false);
     const [locations, setLocations] = useState<Array<LocationData>>([]);
     const [isLoading, setIsLoading] = useState(false);
-    const searchTimeout = useRef<NodeJS.Timeout>(null);
     const searchRef = useRef<HTMLDivElement>(null);
 
     // Auto search when typing

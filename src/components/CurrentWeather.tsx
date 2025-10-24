@@ -18,7 +18,7 @@ function CurrentWeather({
     return (
         <>
             <div
-                className={`md:px-5 p-4 min-h-80 flex justify-around md:justify-between flex-col md:flex-row items-center ${
+                className={`md:px-5 p-4 min-h-80 md:min-h-72 flex justify-around md:justify-between flex-col md:flex-row items-center ${
                     !loading
                         ? "md:bg-[url('/assets/images/bg-today-large.svg')] bg-[url('/assets/images/bg-today-small.svg')] bg-center bg-contain bg-no-repeat"
                         : "bg-neutral-700 rounded-2xl justify-center"
