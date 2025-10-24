@@ -7,16 +7,18 @@ import HourlyWeather from "@/components/HourlyWeather";
 import SearchBar from "@/components/SearchBar";
 import { useEffect, useState } from "react";
 import useUnitStore from "@/stores/unit";
+import parseHourlyData from "@/utils/parseHourlyData";
 
 export default function Home() {
     const { temperatureUnit, windSpeedUnit, precipitationUnit } = useUnitStore();
     const [weatherData, setWeatherData] = useState<WeatherData>();
     const [location, setLocation] = useState<LocationData>({
         id: 0,
-        name: "San Francisco",
-        latitude: 37.7749,
-        longitude: -122.4194,
-        timezone: "America/Los_Angeles",
+        name: "Hanoi",
+        latitude: 21.0245,
+        longitude: 105.8412,
+        timezone: "Asia/Ho_Chi_Minh",
+        country: "Vietnam",
     });
 
     const fetchWeatherData = async () => {
@@ -37,7 +39,7 @@ export default function Home() {
 
     useEffect(() => {
         fetchWeatherData();
-    }, [location, fetchWeatherData]);
+    }, [location]);
 
     return (
         <div className="max-w-[575px] md:max-w-[1248px] mx-auto p-4">
@@ -46,9 +48,9 @@ export default function Home() {
                 {`How's the sky looking today?`}
             </h1>
             <SearchBar location={location} setLocation={setLocation} />
-            <div className="flex gap-3 mt-10">
+            <div className="flex gap-3 mt-10 md:h-[95vh]">
                 <DailyWeather locationData={location} weatherData={weatherData} />
-                <HourlyWeather />
+                <HourlyWeather weatherHourly={parseHourlyData(weatherData)}/>
             </div>
         </div>
     );

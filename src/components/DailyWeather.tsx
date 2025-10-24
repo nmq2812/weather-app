@@ -15,7 +15,7 @@ function DailyWeather({
     const dailyData = weatherData?.daily;
 
     return (
-        <div className="w-2/3">
+        <div className="flex flex-col justify-between w-2/3 h-full">
             <CurrentWeather
                 currentData={currentData}
                 locationData={locationData}

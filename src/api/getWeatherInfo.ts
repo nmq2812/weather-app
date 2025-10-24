@@ -12,7 +12,7 @@ export async function getWeatherInfo(
         latitude: lat,
         longitude: lon,
         daily: ["temperature_2m_max", "temperature_2m_min", "weather_code"],
-        hourly: "temperature_2m",
+        hourly: ["temperature_2m", "weather_code"],
         current: [
             "temperature_2m",
             "apparent_temperature",

@@ -12,9 +12,6 @@ function CurrentWeather({
     const { temperatureUnit, windSpeedUnit, precipitationUnit } =
         useUnitStore();
 
-    console.log("Current Data:", currentData);
-    console.log("Location Data:", locationData);
-
     return (
         <div className="">
             <div className="md:px-5 p-4 min-h-72 flex justify-between items-center md:bg-[url('/assets/images/bg-today-large.svg')] bg-[url('/assets/images/bg-today-small.svg')] bg-center bg-contain bg-no-repeat ">
