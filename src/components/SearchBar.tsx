@@ -5,9 +5,11 @@ import { useState, useEffect, useRef } from "react";
 function SearchBar({
     location,
     setLocation,
+    setLoading,
 }: {
     location: LocationData;
     setLocation: (data: LocationData) => void;
+    setLoading: (loading: boolean) => void;
 }) {
     const [query, setQuery] = useState("");
     const [isOpen, setIsOpen] = useState(false);
@@ -18,24 +20,7 @@ function SearchBar({
 
     // Auto search when typing
     useEffect(() => {
-        if (searchTimeout.current) {
-            clearTimeout(searchTimeout.current);
-        }
-
-        if (query.length >= 2) {
-            searchTimeout.current = setTimeout(() => {
-                handleAutoSearch();
-            }, 500); // Debounce 500ms
-        } else {
-            setLocations([]);
-            setIsOpen(false);
-        }
-
-        return () => {
-            if (searchTimeout.current) {
-                clearTimeout(searchTimeout.current);
-            }
-        };
+        setIsOpen(false);
     }, [query]);
 
     // Close dropdown when clicking outside
@@ -57,39 +42,17 @@ function SearchBar({
     const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         const value = event.target.value;
         setQuery(value);
-
-        if (value.length >= 2) {
-            setIsOpen(true);
-        } else {
-            setIsOpen(false);
-            setLocations([]);
-        }
-    };
-
-    const handleAutoSearch = async () => {
-        if (query.length < 2) return;
-
-        setIsLoading(true);
-        try {
-            const searchResults = await getLocationsByName(query);
-            setLocations(searchResults);
-            setIsOpen(true);
-        } catch (error) {
-            console.error("Search failed:", error);
-            setLocations([]);
-        } finally {
-            setIsLoading(false);
-        }
+        setLocations([]);
     };
 
     const handleManualSearch = async () => {
         if (query.length < 2) return;
 
         setIsLoading(true);
+        setIsOpen(true);
         try {
             const searchResults = await getLocationsByName(query);
             setLocations(searchResults);
-            setIsOpen(true);
         } catch (error) {
             console.error("Search failed:", error);
             setLocations([]);
@@ -99,77 +62,83 @@ function SearchBar({
     };
 
     const selectLocation = (selectedLocation: LocationData) => {
+        setLoading(true);
         setLocation(selectedLocation);
         setIsOpen(false);
         setLocations([]);
     };
 
-    const handleKeyDown = (event: React.KeyboardEvent) => {
-        if (event.key === "Enter") {
-            event.preventDefault();
-            handleManualSearch();
-        } else if (event.key === "Escape") {
-            setIsOpen(false);
-        }
-    };
-
     return (
-        <div className="flex justify-center relative group" ref={searchRef}>
-            <input
-                id="search-input"
-                type="text"
-                placeholder="Search for a place..."
-                className="bg-neutral-700 rounded-lg py-4 lg:w-164 md:w-128 focus:outline-none hover:bg-neutral-600 w-full transition-colors"
-                value={query}
-                onChange={handleInputChange}
-                onKeyDown={handleKeyDown}
-                style={{
-                    backgroundImage: "url('/assets/images/icon-search.svg')",
-                    backgroundRepeat: "no-repeat",
-                    backgroundPosition: "20px center",
-                    paddingLeft: "50px",
-                }}
-                autoComplete="off"
-            />
+        <div
+            className="flex justify-center gap-3 relative group flex-col md:flex-row"
+            ref={searchRef}
+        >
+            <div className="md:w-2/3 w-full flex justify-end">
+                <input
+                    id="search-input"
+                    type="text"
+                    placeholder="Search for a place..."
+                    className="bg-neutral-700 rounded-2xl py-4 lg:w-128 focus:outline-none hover:bg-neutral-600 w-full transition-colors"
+                    value={query}
+                    onChange={handleInputChange}
+                    style={{
+                        backgroundImage:
+                            "url('/assets/images/icon-search.svg')",
+                        backgroundRepeat: "no-repeat",
+                        backgroundPosition: "20px center",
+                        paddingLeft: "50px",
+                    }}
+                    autoComplete="off"
+                />
 
-            {isOpen && (
-                <div className="absolute bg-neutral-700 mt-1 top-full border-0 lg:w-164 md:w-128 rounded-lg overflow-hidden shadow-lg z-10">
-                    {isLoading ? (
-                        <div className="px-4 py-3 text-center">
-                            <span>Searching...</span>
-                        </div>
-                    ) : locations.length > 0 ? (
-                        <ul>
-                            {locations.map((locationItem: LocationData) => (
-                                <li
-                                    key={locationItem.id}
-                                    className="border-b border-neutral-600 last:border-b-0"
-                                >
-                                    <button
-                                        className="w-full px-4 py-3 text-left hover:bg-neutral-600 cursor-pointer transition-colors"
-                                        onClick={() =>
-                                            selectLocation(locationItem)
-                                        }
+                {isOpen && (
+                    <div className="absolute bg-neutral-700 mt-1 top-full border-0 w-full lg:w-128 rounded-lg overflow-hidden shadow-lg z-10">
+                        {isLoading ? (
+                            <div className="px-4 py-3 text-center">
+                                <span>Searching...</span>
+                            </div>
+                        ) : locations?.length > 0 ? (
+                            <ul>
+                                {locations.map((locationItem: LocationData) => (
+                                    <li
+                                        key={locationItem.id}
+                                        className="border-b border-neutral-600 last:border-b-0"
                                     >
-                                        <div className="font-medium">
-                                            {locationItem.name}
-                                        </div>
-                                        <div className="text-sm text-neutral-300">
-                                            {locationItem.country}
-                                            {locationItem.admin1 &&
-                                                `, ${locationItem.admin1}`}
-                                        </div>
-                                    </button>
-                                </li>
-                            ))}
-                        </ul>
-                    ) : query.length >= 2 ? (
-                        <div className="px-4 py-3 text-neutral-400">
-                            {`No results found for "${query}"`}
-                        </div>
-                    ) : null}
-                </div>
-            )}
+                                        <button
+                                            className="w-full px-4 py-3 text-left hover:bg-neutral-600 cursor-pointer transition-colors"
+                                            onClick={() =>
+                                                selectLocation(locationItem)
+                                            }
+                                        >
+                                            <div className="font-medium">
+                                                {locationItem.name}
+                                            </div>
+                                            <div className="text-sm text-neutral-300">
+                                                {locationItem.country}
+                                                {locationItem.admin1 &&
+                                                    `, ${locationItem.admin1}`}
+                                            </div>
+                                        </button>
+                                    </li>
+                                ))}
+                            </ul>
+                        ) : query.length >= 2 ? (
+                            <div className="px-4 py-3 text-neutral-400">
+                                {`No results found for "${query}"`}
+                            </div>
+                        ) : null}
+                    </div>
+                )}
+            </div>
+
+            <div className="md:flex-grow w-full md:w-auto">
+                <button
+                    className="h-full w-full md:w-auto md:p-4 py-2 text-xl bg-blue-500 rounded-2xl cursor-pointer"
+                    onClick={() => handleManualSearch()}
+                >
+                    Search
+                </button>
+            </div>
         </div>
     );
 }

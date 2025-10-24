@@ -5,8 +5,10 @@ import getWeatherIcon from "@/utils/getWeatherIcon";
 
 function HourlyWeather({
     weatherHourly,
+    loading,
 }: {
     weatherHourly: WeatherHourly | undefined;
+    loading: boolean;
 }) {
     const [day, setDay] = useState<string>("");
     const [week, setWeek] = useState<string[]>([]);
@@ -28,7 +30,7 @@ function HourlyWeather({
                     onClick={() => setOpenDropdown(!openDropdown)}
                 >
                     <div className="flex gap-2 ">
-                        {day}
+                        {!loading ? day : "--"}
                         <Image
                             src="assets/images/icon-dropdown.svg"
                             alt="dropdown"
@@ -78,23 +80,27 @@ function HourlyWeather({
                             return (
                                 <div
                                     key={time}
-                                    className="flex items-center justify-between text-2xl min-w-[60px] py-2 pr-3 rounded-xl border-neutral-600 shadow-md border-1 bg-neutral-700"
+                                    className={`flex items-center justify-between text-2xl min-w-[60px] py-2 pr-3 rounded-xl border-neutral-600 shadow-md border-1 bg-neutral-700 ${loading && 'min-h-12'}`}
                                 >
-                                    <div className="flex items-center justify-center gap-2 ">
-                                        <Image
-                                            src={getWeatherIcon(
-                                                info.weatherCode,
-                                            )}
-                                            alt="weather icon"
-                                            width={50}
-                                            height={50}
-                                        />
-                                        <p className="">{time}</p>
-                                    </div>
+                                    {!loading && (
+                                        <>
+                                            <div className="flex items-center justify-center gap-2 ">
+                                                <Image
+                                                    src={getWeatherIcon(
+                                                        info.weatherCode,
+                                                    )}
+                                                    alt="weather icon"
+                                                    width={50}
+                                                    height={50}
+                                                />
+                                                <p className="">{time}</p>
+                                            </div>
 
-                                    <p className="mt-2">
-                                        {info.temperature}°
-                                    </p>
+                                            <p className="mt-2">
+                                                {info.temperature}°
+                                            </p>
+                                        </>
+                                    )}
                                 </div>
                             );
                         },
