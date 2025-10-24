@@ -6,7 +6,7 @@ import getWeatherIcon from "@/utils/getWeatherIcon";
 function HourlyWeather({
     weatherHourly,
 }: {
-    weatherHourly: Record<string, any> | undefined;
+    weatherHourly: WeatherHourly | undefined;
 }) {
     const [day, setDay] = useState<string>("");
     const [week, setWeek] = useState<string[]>([]);
@@ -74,7 +74,7 @@ function HourlyWeather({
                 {day &&
                     weatherHourly &&
                     Object.entries(weatherHourly[day]).map(
-                        ([time, info]: [string, any]) => {
+                        ([time, info]: [string, HourlyWeatherInfo]) => {
                             return (
                                 <div
                                     key={time}

@@ -1,5 +1,5 @@
 function parseHourlyData(weatherData: WeatherData | undefined) {
-    let weatherHourly: Record<string, any> = {};
+    const weatherHourly: WeatherHourly = {};
     const temperatureMetrics = weatherData?.hourly;
     if (temperatureMetrics) {
         temperatureMetrics.temperature_2m?.forEach(
@@ -16,7 +16,7 @@ function parseHourlyData(weatherData: WeatherData | undefined) {
                             hour12: true,
                         })]: {
                             temperature: temp.toFixed(0),
-                            weatherCode: code,
+                            weatherCode: code ?? 0,
                         },
                     };
                 } else {
@@ -25,7 +25,7 @@ function parseHourlyData(weatherData: WeatherData | undefined) {
                         hour12: true,
                     })] = {
                         temperature: temp.toFixed(0),
-                        weatherCode: code,
+                        weatherCode: code ?? 0,
                     };
                 }
             },

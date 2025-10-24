@@ -35,3 +35,16 @@ interface DailyWeather {
     temperature_2m_min: Float32Array<ArrayBufferLike> | null;
     weather_code: Float32Array<ArrayBufferLike> | null;
 }
+
+type HourlyWeatherData = {
+    [time: string]: HourlyWeatherInfo;
+};
+
+type HourlyWeatherInfo = {
+    temperature: string;
+    weatherCode: number;
+};
+
+type WeatherHourly = {
+    [day: string]: HourlyWeatherData;
+};

@@ -165,7 +165,7 @@ function SearchBar({
                         </ul>
                     ) : query.length >= 2 ? (
                         <div className="px-4 py-3 text-neutral-400">
-                            No results found for "{query}"
+                            {`No results found for "${query}"`}
                         </div>
                     ) : null}
                 </div>
