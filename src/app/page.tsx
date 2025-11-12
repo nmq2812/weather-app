@@ -22,14 +22,14 @@ export default function Home() {
         timezone: "Asia/Ho_Chi_Minh",
         country: "Vietnam",
     });
-    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [isLoading, setIsLoading] = useState<boolean>(true);
     const [error, setError] = useState<string | null>(null);
 
     const fetchWeatherData = async (location: LocationData | undefined) => {
+        setError(null);
         try {
             if (!location) {
                 console.error("Location is not set");
-                setIsLoading(false);
                 return;
             }
             const data = await getWeatherInfo(
@@ -41,10 +41,11 @@ export default function Home() {
                 precipitationUnit,
             );
             data && setWeatherData(data);
-            setIsLoading(false);
         } catch (error) {
             console.error("Error fetching weather data:", error);
             setError("Failed to fetch weather data.");
+        } finally {
+            setIsLoading(false);
         }
     };
 
